@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Asia & Africa: Finance, People & Parallels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --gold:    #C9A84C;
+    --rust:    #C45E2A;
+    --teal:    #2A8A8A;
+    --ivory:   #F4EFE0;
+    --dark:    #1A1612;
+    --charcoal:#2D2620;
+    --muted:   #7A6E62;
+    --accent:  #E8734A;
+    --green:   #4A8C6A;
+    --red:     #C43A3A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--ivory);
+    font-family: 'Source Serif 4', Georgia, serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 85% 5%, rgba(201,168,76,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 5% 85%, rgba(42,138,138,0.07) 0%, transparent 55%);
+  }
+
+  /* ── HEADER ── */
+  header {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 52px 32px 40px;
+    border-bottom: 1px solid rgba(201,168,76,0.22);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-svg {
+    position: absolute;
+    right: 32px; top: 20px;
+    opacity: 0.07;
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .eyebrow-line { width: 38px; height: 2px; background: var(--gold); }
+  .eyebrow-text {
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  h1 span { color: var(--gold); }
+
+  .subtitle { color: var(--muted); font-size: 15px; max-width: 580px; line-height: 1.7; }
+
+  /* ── TABS ── */
+  nav.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 36px;
+  }
+  .tab-btn {
+    padding: 10px 26px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    transition: all 0.18s;
+  }
+  .tab-btn:hover { color: var(--ivory); border-color: var(--gold); }
+  .tab-btn.active {
+    background: var(--gold);
+    color: var(--dark);
+    border-color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 56px 32px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── STAT GRID ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .stat-card {
+    background: var(--charcoal);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 28px 20px;
+    text-align: center;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    color: var(--gold);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label { color: var(--ivory); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .stat-sub   { color: var(--muted); font-size: 11px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--charcoal);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 28px;
+  }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 16px;
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .card .card-sub { color: var(--muted); font-size: 12px; margin-bottom: 20px; }
+
+  /* ── GRID LAYOUTS ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ── CANVAS containers ── */
+  .chart-wrap { position: relative; }
+
+  /* ── LEGEND ── */
+  .legend { display: flex; flex-direction: column; gap: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-name { color: var(--muted); font-size: 11px; flex: 1; }
+  .legend-pct  { color: var(--ivory); font-size: 11px; }
+
+  .pie-row { display: flex; align-items: center; gap: 20px; }
+  .pie-row canvas { flex-shrink: 0; }
+
+  /* ── RANKING LIST ── */
+  .rank-list { list-style: none; }
+  .rank-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .rank-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--gold); min-width: 30px;
+  }
+  .rank-place { color: var(--ivory); font-size: 13px; font-weight: 600; }
+  .rank-note  { color: var(--muted); font-size: 11px; }
+
+  /* ── DEBT WARNING ── */
+  .warning-card {
+    background: rgba(196,58,58,0.06);
+    border: 1px solid rgba(196,58,58,0.35);
+    border-radius: 4px;
+    padding: 22px 24px;
+    display: flex; gap: 16px; align-items: flex-start;
+    margin-top: 24px;
+  }
+  .warning-icon { font-size: 22px; flex-shrink: 0; }
+  .warning-title { color: var(--red); font-family: 'Playfair Display', serif; font-size: 15px; margin-bottom: 8px; }
+  .warning-body  { color: var(--muted); font-size: 13px; line-height: 1.75; }
+
+  /* ── PAIRINGS ── */
+  .pairing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .pairing-card {
+    background: var(--charcoal);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .pairing-card:hover {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.07);
+  }
+  .pairing-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: rgba(255,255,255,0.05);
+  }
+  .pairing-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 1px;
+  }
+  .pairing-names {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 12px;
+  }
+  .pairing-africa { color: var(--ivory); font-weight: 700; font-size: 15px; }
+  .pairing-arrow  { color: var(--gold); font-size: 18px; }
+  .pairing-asia   { color: var(--teal); font-weight: 700; font-size: 15px; }
+  .strength-row   { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .strength-track { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; }
+  .strength-fill  { height: 100%; background: var(--gold); border-radius: 2px; }
+  .strength-pct   { color: var(--gold); font-size: 11px; font-weight: 700; }
+  .pairing-reason { color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+  .weak-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .weak-card {
+    padding: 12px;
+    background: rgba(196,58,58,0.05);
+    border: 1px solid rgba(196,58,58,0.2);
+    border-radius: 3px;
+  }
+  .weak-pair { color: var(--ivory); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .weak-why  { color: var(--muted); font-size: 12px; }
+
+  /* ── FOOTER ── */
+  footer {
+    max-width: 1140px; margin: 0 auto;
+    padding: 24px 32px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-src { color: var(--muted); font-size: 12px; }
+  .footer-brand { color: var(--gold); font-family: 'Playfair Display', serif; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <svg class="header-svg" width="340" height="170" viewBox="0 0 340 170">
+    <path d="M80,10 L110,12 L120,25 L125,40 L122,55 L118,70 L120,85 L115,100 L105,115 L95,130 L85,140 L78,148 L72,140 L65,125 L60,108 L58,90 L60,72 L58,55 L62,38 L70,22 Z" fill="#C9A84C"/>
+    <path d="M175,22 L225,16 L268,24 L292,38 L300,55 L294,70 L278,80 L262,86 L246,92 L228,87 L210,85 L196,77 L182,68 L174,52 L170,36 Z" fill="#2A8A8A"/>
+    <path d="M118,82 Q190,42 238,78" stroke="#C9A84C" stroke-width="1.5" fill="none" stroke-dasharray="5,4" opacity="0.7"/>
+    <circle cx="118" cy="82" r="4.5" fill="#C9A84C" opacity="0.85"/>
+    <circle cx="238" cy="78" r="4.5" fill="#2A8A8A" opacity="0.85"/>
+  </svg>
+
+  <div class="eyebrow">
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-text">Data Intelligence Report · 2000–2025</span>
+  </div>
+
+  <h1>Asia &amp; Africa:<br><span>Finance, People &amp; Parallels</span></h1>
+  <p class="subtitle">Comprehensive statistics on Asian development finance, diaspora populations, tourism flows, and comparative country pairings across the two continents.</p>
+
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="switchTab('finance')">Finance</button>
+    <button class="tab-btn" onclick="switchTab('debt')">Debt</button>
+    <button class="tab-btn" onclick="switchTab('people')">People</button>
+    <button class="tab-btn" onclick="switchTab('pairings')">Pairings</button>
+  </nav>
+</header>
+
+<!-- ══════════ MAIN ══════════ -->
+<main>
+
+  <!-- ── FINANCE ── -->
+  <div class="tab-panel active" id="panel-finance">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-value">$182B</div><div class="stat-label">Chinese Loans to Africa</div><div class="stat-sub">2000–2023</div></div>
+      <div class="stat-card"><div class="stat-value">$30B</div><div class="stat-label">Japan Pledges ×3</div><div class="stat-sub">2013, 2016, 2022</div></div>
+      <div class="stat-card"><div class="stat-value">$12B+</div><div class="stat-label">India Credit Lines</div><div class="stat-sub">40–45% directed to Africa</div></div>
+      <div class="stat-card"><div class="stat-value">22</div><div class="stat-label">Nations in Debt Distress</div><div class="stat-sub">IMF / World Bank 2024</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Top Recipients of Chinese Loans</h3>
+        <p class="card-sub">US$ Billions · 2000–2023</p>
+        <div class="chart-wrap"><canvas id="loansChart" height="200"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Loan vs Grant Composition</h3>
+        <p class="card-sub">% of total aid — by donor</p>
+        <div class="chart-wrap"><canvas id="grantChart" height="200"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Chinese Finance — Sectors</h3>
+        <p class="card-sub">Approximate share of total financing</p>
+        <div class="pie-row">
+          <canvas id="pieChina" width="160" height="160"></canvas>
+          <div class="legend" id="legendChina"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Japanese Aid — Sectors</h3>
+        <p class="card-sub">Approximate share of total aid</p>
+        <div class="pie-row">
+          <canvas id="pieJapan" width="160" height="160"></canvas>
+          <div class="legend" id="legendJapan"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DEBT ── -->
+  <div class="tab-panel" id="panel-debt">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-value">22</div><div class="stat-label">Nations in Distress or High Risk</div><div class="stat-sub">IMF + World Bank · 2024</div></div>
+      <div class="stat-card"><div class="stat-value">12–20%</div><div class="stat-label">China's Average Share of Africa's External Debt</div><div class="stat-sub">Continental average</div></div>
+      <div class="stat-card"><div class="stat-value">30%+</div><div class="stat-label">China's Share in Worst-Hit Nations</div><div class="stat-sub">Angola, Zambia, Ethiopia</div></div>
+      <div class="stat-card"><div class="stat-value">2016</div><div class="stat-label">Peak Lending Year</div><div class="stat-sub">$28B+ committed</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Chinese Share of External Public Debt</h3>
+        <p class="card-sub">Selected countries vs continental average (%)</p>
+        <div class="chart-wrap"><canvas id="debtChart" height="220"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Chinese Annual Lending Trend</h3>
+        <p class="card-sub">US$ Billions — indicative figures</p>
+        <div class="chart-wrap"><canvas id="trendChart" height="220"></canvas></div>
+        <p style="color:var(--muted);font-size:11px;text-align:right;margin-top:8px;">2016 peak highlighted in gold</p>
+      </div>
+    </div>
+
+    <div class="warning-card">
+      <div class="warning-icon">⚠️</div>
+      <div>
+        <div class="warning-title">Debt Restructuring Cases</div>
+        <div class="warning-body">Zambia and Ethiopia underwent debt restructuring processes with Chinese creditors as of 2023–2024. Angola renegotiated repayment terms multiple times since 2020. These cases have intensified global scrutiny of Chinese lending practices, though China disputes "debt trap" characterisations, pointing to infrastructure value created.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PEOPLE ── -->
+  <div class="tab-panel" id="panel-people">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-value">8–10M</div><div class="stat-label">Asian Visitors to Africa Annually</div><div class="stat-sub">12–15% of all arrivals</div></div>
+      <div class="stat-card"><div class="stat-value">2.95M</div><div class="stat-label">Indian Diaspora in Africa</div><div class="stat-sub">Largest Asian group</div></div>
+      <div class="stat-card"><div class="stat-value">1.05M</div><div class="stat-label">Chinese Nationals in Africa</div><div class="stat-sub">Peak estimate</div></div>
+      <div class="stat-card"><div class="stat-value">67M</div><div class="stat-label">Total African Tourist Arrivals</div><div class="stat-sub">2024 estimate</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Annual Asian Visitors to Africa</h3>
+        <p class="card-sub">Millions · approx. 2024</p>
+        <div class="chart-wrap"><canvas id="tourismChart" height="200"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Asian Diaspora Residents in Africa</h3>
+        <p class="card-sub">Millions · best estimates 2024</p>
+        <div class="chart-wrap"><canvas id="diasporaChart" height="200"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Tourism Growth by African Destination</h3>
+        <p class="card-sub">% growth in Asian visitors · 2010–2024</p>
+        <div class="chart-wrap"><canvas id="growthChart" height="200"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Top Preferred African Destinations</h3>
+        <p class="card-sub">Survey preference vs actual arrivals — closely aligned</p>
+        <ul class="rank-list">
+          <li class="rank-item"><span class="rank-num">01</span><div><div class="rank-place">South Africa</div><div class="rank-note">Business + wildlife</div></div></li>
+          <li class="rank-item"><span class="rank-num">02</span><div><div class="rank-place">Egypt</div><div class="rank-note">Heritage tourism</div></div></li>
+          <li class="rank-item"><span class="rank-num">03</span><div><div class="rank-place">Morocco</div><div class="rank-note">Culture + proximity</div></div></li>
+          <li class="rank-item"><span class="rank-num">04</span><div><div class="rank-place">Kenya</div><div class="rank-note">Safari + eco-tourism</div></div></li>
+          <li class="rank-item"><span class="rank-num">05</span><div><div class="rank-place">Tanzania</div><div class="rank-note">Kilimanjaro + Serengeti</div></div></li>
+          <li class="rank-item"><span class="rank-num">06</span><div><div class="rank-place">Mauritius</div><div class="rank-note">Luxury island resort</div></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAIRINGS ── -->
+  <div class="tab-panel" id="panel-pairings">
+    <p style="color:var(--muted);font-size:14px;max-width:680px;margin-bottom:40px;line-height:1.8;">
+      Statistical parallels between African Union member states and Asian counterparts — based on population, economic structure, governance models, resource profiles, and geopolitical role. Hover a card to see rationale highlighted.
+    </p>
+
+    <div class="pairing-grid" id="pairingGrid"></div>
+
+    <div class="card" style="border-color:rgba(196,58,58,0.35);background:rgba(45,38,32,0.85);">
+      <h3 style="color:var(--red);margin-bottom:16px;">Weakest Statistical Matches</h3>
+      <div class="weak-grid">
+        <div class="weak-card"><div class="weak-pair">Ghana ↔ South Korea</div><div class="weak-why">South Korea far wealthier &amp; more industrialised</div></div>
+        <div class="weak-card"><div class="weak-pair">Djibouti ↔ Singapore</div><div class="weak-why">Similar strategic role; huge development gap</div></div>
+        <div class="weak-card"><div class="weak-pair">Comoros ↔ Brunei</div><div class="weak-why">Large income disparity</div></div>
+        <div class="weak-card"><div class="weak-pair">S. Africa ↔ China</div><div class="weak-why">SA much smaller; India may be structurally closer</div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <span class="footer-src">Sources: Boston University Global Development Policy Center · AidData · IMF · World Bank · JICA · KOICA · 2023–2025</span>
+  <span class="footer-brand">Asia–Africa Intelligence Report</span>
+</footer>
+
+<script>
+/* ── COLOURS ── */
+const C = {
+  gold:    '#C9A84C', rust:  '#C45E2A', teal:  '#2A8A8A',
+  ivory:   '#F4EFE0', dark:  '#1A1612', muted: '#7A6E62',
+  accent:  '#E8734A', green: '#4A8C6A', red:   '#C43A3A',
+  charcoal:'#2D2620',
+};
+
+Chart.defaults.color = C.muted;
+Chart.defaults.font.family = "'Source Serif 4', Georgia, serif";
+
+const gridCfg = {
+  color: 'rgba(201,168,76,0.1)',
+  drawBorder: false,
+};
+
+/* ── TAB SWITCH ── */
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+/* ── CHART HELPERS ── */
+function hBar(id, labels, data, color) {
+  return new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data, backgroundColor: color, borderRadius: 3, borderSkipped: false }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => ' ' + ctx.parsed.x
+      }}},
+      scales: {
+        x: { grid: gridCfg, ticks: { color: C.muted, font: { size: 11 } } },
+        y: { grid: { display: false }, ticks: { color: C.ivory, font: { size: 12 } } }
+      }
+    }
+  });
+}
+
+function vBar(id, labels, datasets) {
+  return new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      plugins: { legend: { labels: { color: C.muted, font: { size: 11 } } }, tooltip: {} },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: C.ivory, font: { size: 12 } } },
+        y: { grid: gridCfg, ticks: { color: C.muted, font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function makePie(canvasId, legendId, data, colors) {
+  const labels = data.map(d => d.name);
+  const values = data.map(d => d.value);
+  new Chart(document.getElementById(canvasId), {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: colors, borderWidth: 2, borderColor: C.charcoal }]
+    },
+    options: {
+      cutout: '55%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => ' ' + ctx.label + ': ' + ctx.parsed + '%'
+      }}}
+    }
+  });
+  const leg = document.getElementById(legendId);
+  data.forEach((d, i) => {
+    leg.innerHTML += `<div class="legend-item">
+      <div class="legend-dot" style="background:${colors[i]}"></div>
+      <span class="legend-name">${d.name}</span>
+      <span class="legend-pct">${d.value}%</span>
+    </div>`;
+  });
+}
+
+/* ── FINANCE CHARTS ── */
+hBar('loansChart',
+  ['Angola','Ethiopia','Egypt','Kenya','Zambia'],
+  [47.5, 16, 10, 9.5, 9],
+  C.rust
+);
+
+vBar('grantChart',
+  ['China','India','Japan','S. Korea'],
+  [
+    { label: 'Loans %',  data: [87, 85, 45, 25], backgroundColor: C.rust,  borderRadius: 0 },
+    { label: 'Grants %', data: [13, 15, 55, 75], backgroundColor: C.green, borderRadius: 3 },
+  ]
+);
+
+makePie('pieChina', 'legendChina',
+  [{name:'Transport',value:32},{name:'Energy',value:27},{name:'Mining',value:12},
+   {name:'Telecom',value:7},{name:'Health/Ed',value:8},{name:'Other',value:14}],
+  [C.rust, C.gold, C.teal, C.green, C.muted, C.charcoal]
+);
+makePie('pieJapan', 'legendJapan',
+  [{name:'Infrastructure',value:37},{name:'Health',value:17},{name:'Education',value:17},
+   {name:'Governance',value:12},{name:'Other',value:17}],
+  [C.gold, C.teal, C.green, C.rust, C.muted]
+);
+
+/* ── DEBT CHARTS ── */
+const debtLabels = ['Angola','Zambia','Ethiopia','Kenya','Africa avg'];
+const debtValues = [38, 32, 30, 18, 16];
+new Chart(document.getElementById('debtChart'), {
+  type: 'bar',
+  data: {
+    labels: debtLabels,
+    datasets: [{
+      data: debtValues,
+      backgroundColor: debtLabels.map(l => l === 'Africa avg' ? C.teal : C.red),
+      borderRadius: 3,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false }, tooltip: { callbacks: {
+      label: ctx => ' ' + ctx.parsed.x + '%'
+    }}},
+    scales: {
+      x: { grid: gridCfg, ticks: { color: C.muted, font: { size: 11 } }, max: 50 },
+      y: { grid: { display: false }, ticks: { color: C.ivory, font: { size: 12 } } }
+    }
+  }
+});
+
+const trendYears = ['2010','2012','2014','2016','2018','2020','2022','2024e'];
+const trendVals  = [10, 14, 20, 28, 17, 7, 8, 9];
+new Chart(document.getElementById('trendChart'), {
+  type: 'bar',
+  data: {
+    labels: trendYears,
+    datasets: [{
+      label: 'US$B',
+      data: trendVals,
+      backgroundColor: trendVals.map(v => v === 28 ? C.gold : C.rust),
+      borderRadius: 3,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false }, tooltip: { callbacks: {
+      label: ctx => ' $' + ctx.parsed.y + 'B'
+    }}},
+    scales: {
+      x: { grid: { display: false }, ticks: { color: C.muted, font: { size: 11 } } },
+      y: { grid: gridCfg, ticks: { color: C.muted, font: { size: 11 } } }
+    }
+  }
+});
+
+/* ── PEOPLE CHARTS ── */
+vBar('tourismChart',
+  ['China','India','Japan','S. Korea'],
+  [{ label: 'Millions', data: [1.75, 1.75, 0.4, 0.32], backgroundColor: C.teal, borderRadius: 3 }]
+);
+
+hBar('diasporaChart',
+  ['Indian','Chinese','Lebanese','Pakistani','Korean'],
+  [2.95, 1.05, 0.9, 0.2, 0.075],
+  C.gold
+);
+
+hBar('growthChart',
+  ['Rwanda','Morocco','Tanzania','Mauritius','Egypt'],
+  [350, 275, 225, 200, 160],
+  C.accent
+);
+
+/* ── PAIRINGS ── */
+const pairings = [
+  { africa:'Nigeria',   asia:'India',     strength:90, reason:'Population, federalism, linguistic diversity, regional dominance' },
+  { africa:'Ethiopia',  asia:'India',     strength:85, reason:'Ancient civilization, demographic scale, agricultural transformation' },
+  { africa:'Rwanda',    asia:'Singapore', strength:88, reason:'Developmental-state model, governance-first approach' },
+  { africa:'Morocco',   asia:'Turkey',    strength:80, reason:'Regional manufacturing hub and bridge geography' },
+  { africa:'Botswana',  asia:'Mongolia',  strength:82, reason:'Mineral dependence, landlocked, low population density' },
+  { africa:'Mauritius', asia:'Taiwan',    strength:86, reason:'Export-oriented island economy, strong human development' },
+  { africa:'Eritrea',   asia:'N. Korea',  strength:78, reason:'Isolation and state control' },
+  { africa:'Libya',     asia:'Iraq',      strength:75, reason:'Oil wealth + post-regime instability' },
+];
+
+const grid = document.getElementById('pairingGrid');
+pairings.forEach(p => {
+  grid.innerHTML += `
+    <div class="pairing-card">
+      <div class="pairing-bar"><div class="pairing-bar-fill" style="width:${p.strength}%"></div></div>
+      <div class="pairing-names">
+        <span class="pairing-africa">${p.africa}</span>
+        <span class="pairing-arrow">↔</span>
+        <span class="pairing-asia">${p.asia}</span>
+      </div>
+      <div class="strength-row">
+        <div class="strength-track"><div class="strength-fill" style="width:${p.strength}%"></div></div>
+        <span class="strength-pct">${p.strength}%</span>
+      </div>
+      <p class="pairing-reason">${p.reason}</p>
+    </div>`;
+});
+</script>
+</body>
+</html>
