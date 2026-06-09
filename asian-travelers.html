@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asian Traveler Psychographics: Africa</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f0e0b;
+    --paper: #f5f0e8;
+    --sand: #e8dfc8;
+    --rust: #c4622d;
+    --ochre: #d4933a;
+    --sage: #5a7a5e;
+    --dusk: #4a5568;
+    --terracotta: #b85a3a;
+    --gold: #c9943a;
+    --slate: #6b7280;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.5;
+  }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+  }
+
+  /* HEADER */
+  .header {
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 40px 0 32px;
+    margin-bottom: 60px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 20px;
+  }
+
+  .header-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .header-meta {
+    text-align: right;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--slate);
+    line-height: 2;
+  }
+
+  /* INTRO */
+  .intro {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    margin-bottom: 80px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .intro-pull {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--rust);
+    font-style: italic;
+  }
+
+  .intro-body {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--dusk);
+  }
+
+  .intro-body strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #ccc;
+  }
+
+  /* TRIBES GRID */
+  .tribes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 80px;
+    background: var(--ink);
+    border: 2px solid var(--ink);
+  }
+
+  .tribe-card {
+    background: var(--paper);
+    padding: 28px 24px;
+    position: relative;
+    transition: background 0.2s;
+    cursor: default;
+  }
+
+  .tribe-card:hover {
+    background: var(--sand);
+  }
+
+  .tribe-number {
+    font-size: 48px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    color: var(--sand);
+    line-height: 1;
+    margin-bottom: 4px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  .tribe-tag {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .tribe-name {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    padding-right: 40px;
+  }
+
+  .tribe-imagines {
+    font-size: 11px;
+    font-style: italic;
+    color: var(--rust);
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    border-left: 2px solid var(--rust);
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+  }
+
+  .tribe-origins {
+    font-size: 10px;
+    color: var(--slate);
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  .tribe-trait {
+    display: inline-block;
+    font-size: 9px;
+    padding: 3px 8px;
+    background: var(--ink);
+    color: var(--paper);
+    letter-spacing: 0.1em;
+    margin: 2px 2px 2px 0;
+  }
+
+  .tribe-destinations {
+    margin-top: 14px;
+    font-size: 10px;
+    color: var(--sage);
+    letter-spacing: 0.05em;
+  }
+
+  /* MAP TABLE */
+  .map-section {
+    margin-bottom: 80px;
+  }
+
+  .country-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--ink);
+    border: 2px solid var(--ink);
+  }
+
+  .country-row {
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: stretch;
+  }
+
+  .country-name {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 16px 20px;
+    border-right: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+  }
+
+  .country-psych {
+    padding: 16px 20px;
+    font-size: 11px;
+    color: var(--dusk);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .psych-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .psych-pill.builder    { color: #c4622d; border-color: #c4622d; }
+  .psych-pill.strategist { color: #4a5568; border-color: #4a5568; }
+  .psych-pill.heritage   { color: #5a7a5e; border-color: #5a7a5e; }
+  .psych-pill.muslim     { color: #7c6d52; border-color: #7c6d52; }
+  .psych-pill.observer   { color: #2d6a8a; border-color: #2d6a8a; }
+  .psych-pill.explorer   { color: #8a4a8a; border-color: #8a4a8a; }
+
+  /* MINDSET MATRIX */
+  .matrix-section {
+    margin-bottom: 80px;
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 2px solid var(--ink);
+  }
+
+  .matrix-cell {
+    padding: 32px 20px;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+  }
+  .matrix-cell:nth-child(5n) { border-right: none; }
+  .matrix-cell:nth-last-child(-n+5) { border-bottom: none; }
+
+  .matrix-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+    line-height: 1;
+  }
+
+  .matrix-label {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .matrix-desc {
+    font-size: 10px;
+    color: var(--slate);
+    line-height: 1.7;
+  }
+
+  .matrix-dominant {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .matrix-dominant .matrix-desc {
+    color: rgba(245, 240, 232, 0.7);
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--ink);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--slate);
+    letter-spacing: 0.1em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .tribe-card {
+    animation: fadeUp 0.5s ease both;
+  }
+  .tribe-card:nth-child(1) { animation-delay: 0.05s; }
+  .tribe-card:nth-child(2) { animation-delay: 0.10s; }
+  .tribe-card:nth-child(3) { animation-delay: 0.15s; }
+  .tribe-card:nth-child(4) { animation-delay: 0.20s; }
+  .tribe-card:nth-child(5) { animation-delay: 0.25s; }
+  .tribe-card:nth-child(6) { animation-delay: 0.30s; }
+
+  .header { animation: fadeUp 0.6s ease 0s both; }
+  .intro  { animation: fadeUp 0.6s ease 0.1s both; }
+
+  @media (max-width: 900px) {
+    .tribes-grid { grid-template-columns: repeat(2, 1fr); }
+    .matrix { grid-template-columns: repeat(2, 1fr); }
+    .intro { grid-template-columns: 1fr; }
+    .country-grid { grid-template-columns: 1fr; }
+    .matrix-cell:nth-child(2n) { border-right: none; }
+  }
+
+  @media (max-width: 600px) {
+    .tribes-grid { grid-template-columns: 1fr; }
+    .page { padding: 30px 20px 60px; }
+    .header { grid-template-columns: 1fr; }
+    .header-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div>
+      <div class="header-label">Psychographic Field Study · Great Green Wall Corridor</div>
+      <h1>Asian Travelers<br>to <em>Africa</em></h1>
+      <div style="margin-top:16px; font-size:12px; color:var(--slate); line-height:1.8;">
+        Six psychological tribes · Eleven GGW nations · One analytical framework
+      </div>
+    </div>
+    <div class="header-meta">
+      MINDSET ATLAS<br>
+      ASIA → AFRICA<br>
+      ───────────<br>
+      6 PROFILES<br>
+      11 COUNTRIES
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <div class="intro">
+    <div class="intro-pull">
+      "The most important distinction is not Chinese vs Indian vs Japanese—it is <em>which Africa they believe they are visiting.</em>"
+    </div>
+    <div class="intro-body">
+      Moving beyond nationality and into <strong>psychometrics</strong>—motivations, risk tolerance, status signaling, novelty-seeking, spending behavior, identity, and travel narratives—the Asian traveler to Africa is not one market but <strong>several distinct psychological tribes.</strong>
+      <br><br>
+      The mental model a traveler holds often predicts behavior more accurately than passport of origin. For the Great Green Wall states specifically, visitors are far more likely to be motivated by <strong>commerce, networks, religion, infrastructure, and long-term positioning</strong> than by classic safari-tourism drivers.
+    </div>
+  </div>
+
+  <!-- SIX TRIBES -->
+  <div class="section-title">The Six Psychographic Tribes</div>
+
+  <div class="tribes-grid">
+
+    <div class="tribe-card">
+      <div class="tribe-number">01</div>
+      <span class="tribe-tag">Opportunity Mindset</span>
+      <div class="tribe-name">The Frontier<br>Builder</div>
+      <div class="tribe-imagines">"Tomorrow's growth frontier."</div>
+      <div class="tribe-origins">Chinese · Indian · Turkish · Gulf business travelers</div>
+      <div>
+        <span class="tribe-trait">High opportunity orientation</span>
+        <span class="tribe-trait">Sees disorder as efficiency gap</span>
+        <span class="tribe-trait">Long time horizon</span>
+        <span class="tribe-trait">Relationship over institutions</span>
+      </div>
+      <div class="tribe-destinations">↗ Ethiopia · Nigeria · Kenya · Ghana · Senegal · Tanzania</div>
+    </div>
+
+    <div class="tribe-card">
+      <div class="tribe-number">02</div>
+      <span class="tribe-tag">Adventure Mindset</span>
+      <div class="tribe-name">The Prestige<br>Explorer</div>
+      <div class="tribe-imagines">"The last great adventure."</div>
+      <div class="tribe-origins">Japanese · South Korean · Singaporean · Affluent Chinese</div>
+      <div>
+        <span class="tribe-trait">High novelty-seeking</span>
+        <span class="tribe-trait">Wants uncommon experiences</span>
+        <span class="tribe-trait">Story as social capital</span>
+        <span class="tribe-trait">High daily spend</span>
+      </div>
+      <div class="tribe-destinations">↗ Botswana · Namibia · Rwanda · Tanzania · South Africa</div>
+    </div>
+
+    <div class="tribe-card">
+      <div class="tribe-number">03</div>
+      <span class="tribe-tag">Heritage Mindset</span>
+      <div class="tribe-name">The Heritage-<br>Seeker</div>
+      <div class="tribe-imagines">"A forgotten branch of our shared history."</div>
+      <div class="tribe-origins">Indians · Indonesians · Malaysians · Arabs</div>
+      <div>
+        <span class="tribe-trait">Identity-oriented</span>
+        <span class="tribe-trait">Civilizational curiosity</span>
+        <span class="tribe-trait">Seeks cultural continuity</span>
+        <span class="tribe-trait">Long itineraries</span>
+      </div>
+      <div class="tribe-destinations">↗ Egypt · Sudan · Ethiopia · Zanzibar · Senegal</div>
+    </div>
+
+    <div class="tribe-card">
+      <div class="tribe-number">04</div>
+      <span class="tribe-tag">Religious Mindset</span>
+      <div class="tribe-name">The Muslim<br>Connectivity Traveler</div>
+      <div class="tribe-imagines">"A familiar Islamic world."</div>
+      <div class="tribe-origins">Gulf Arabs · Malaysians · Indonesians · Pakistanis</div>
+      <div>
+        <span class="tribe-trait">Trust via religious familiarity</span>
+        <span class="tribe-trait">Lower cultural friction</span>
+        <span class="tribe-trait">Strong network effects</span>
+        <span class="tribe-trait">Family + investment</span>
+      </div>
+      <div class="tribe-destinations">↗ Senegal · Mauritania · Nigeria (N) · Sudan · Djibouti</div>
+    </div>
+
+    <div class="tribe-card">
+      <div class="tribe-number">05</div>
+      <span class="tribe-tag">Institutional Mindset</span>
+      <div class="tribe-name">The Development<br>Observer</div>
+      <div class="tribe-imagines">"Countries at an earlier stage of development."</div>
+      <div class="tribe-origins">South Koreans · Japanese · Singaporeans · Chinese professionals</div>
+      <div>
+        <span class="tribe-trait">Fascinated by transformation</span>
+        <span class="tribe-trait">Analytical orientation</span>
+        <span class="tribe-trait">Nation-building interest</span>
+        <span class="tribe-trait">Conferences + exchanges</span>
+      </div>
+      <div class="tribe-destinations">↗ Rwanda · Ethiopia · Ghana · Botswana</div>
+    </div>
+
+    <div class="tribe-card">
+      <div class="tribe-number">06</div>
+      <span class="tribe-tag">Logistics Mindset</span>
+      <div class="tribe-name">The Geo-Economic<br>Strategist</div>
+      <div class="tribe-imagines">"A strategic map."</div>
+      <div class="tribe-origins">Chinese executives · Gulf SWF officials · Indian industrialists · Turkish investors</div>
+      <div>
+        <span class="tribe-trait">Corridors &amp; ports logic</span>
+        <span class="tribe-trait">System-level thinking</span>
+        <span class="tribe-trait">Repeat high-value visits</span>
+        <span class="tribe-trait">Supply chain focus</span>
+      </div>
+      <div class="tribe-destinations">↗ Djibouti · Ethiopia · Egypt · Nigeria · Senegal</div>
+    </div>
+
+  </div>
+
+  <!-- MATRIX OF MINDSETS -->
+  <div class="matrix-section">
+    <div class="section-title">How Travelers See Africa</div>
+    <div class="matrix">
+      <div class="matrix-cell matrix-dominant">
+        <span class="matrix-icon">🏗</span>
+        <div class="matrix-label">An Opportunity</div>
+        <div class="matrix-desc">Investor mindset. Disorder as market signal. Infrastructure today, profits tomorrow.</div>
+      </div>
+      <div class="matrix-cell">
+        <span class="matrix-icon">🧭</span>
+        <div class="matrix-label">An Adventure</div>
+        <div class="matrix-desc">Explorer mindset. Rare experiences. "Not everyone has tracked lions."</div>
+      </div>
+      <div class="matrix-cell">
+        <span class="matrix-icon">🏛</span>
+        <div class="matrix-label">A Shared Civilization</div>
+        <div class="matrix-desc">Heritage mindset. Trade routes, continuity, and civilizational echoes.</div>
+      </div>
+      <div class="matrix-cell matrix-dominant">
+        <span class="matrix-icon">🗺</span>
+        <div class="matrix-label">A Strategic Geography</div>
+        <div class="matrix-desc">Logistics mindset. Corridors, ports, and future supply chains. Djibouti is the archetype.</div>
+      </div>
+      <div class="matrix-cell">
+        <span class="matrix-icon">📊</span>
+        <div class="matrix-label">A Development Case</div>
+        <div class="matrix-desc">Institutional mindset. Analytical. "This resembles where we were decades ago."</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:10px; color:var(--rust); letter-spacing:0.1em;">
+      ■ DOMINANT IN GGW CORRIDOR &nbsp;·&nbsp; For Ethiopia, Senegal, Nigeria, Djibouti, Mauritania
+    </div>
+  </div>
+
+  <!-- GGW COUNTRY MAP -->
+  <div class="map-section">
+    <div class="section-title">Great Green Wall States · Dominant Visitor Psychology</div>
+    <div class="country-grid">
+
+      <div class="country-row">
+        <div class="country-name">Ethiopia</div>
+        <div class="country-psych">
+          <span class="psych-pill builder">Builder</span>
+          <span class="psych-pill observer">Dev. Observer</span>
+          <span class="psych-pill strategist">Strategist</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Senegal</div>
+        <div class="country-psych">
+          <span class="psych-pill muslim">Muslim Connectivity</span>
+          <span class="psych-pill builder">Builder</span>
+          <span class="psych-pill heritage">Heritage</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Nigeria</div>
+        <div class="country-psych">
+          <span class="psych-pill builder">Builder</span>
+          <span class="psych-pill strategist">Strategist</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Djibouti</div>
+        <div class="country-psych">
+          <span class="psych-pill strategist">Strategist</span>
+          <span class="psych-pill muslim">Muslim Connectivity</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Mauritania</div>
+        <div class="country-psych">
+          <span class="psych-pill muslim">Muslim Connectivity</span>
+          <span class="psych-pill heritage">Heritage</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Sudan</div>
+        <div class="country-psych">
+          <span class="psych-pill heritage">Heritage</span>
+          <span class="psych-pill muslim">Muslim Connectivity</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Chad</div>
+        <div class="country-psych">
+          <span class="psych-pill builder">Builder</span>
+          <span style="font-size:10px; color:var(--slate);">energy / mining niche</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Mali</div>
+        <div class="country-psych">
+          <span class="psych-pill heritage">Heritage</span>
+          <span style="font-size:10px; color:var(--slate);">historically</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Niger</div>
+        <div class="country-psych">
+          <span class="psych-pill builder">Builder</span>
+          <span style="font-size:10px; color:var(--slate);">uranium, infrastructure niche</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Burkina Faso</div>
+        <div class="country-psych">
+          <span style="font-size:10px; color:var(--slate);">Regional business travelers</span>
+        </div>
+      </div>
+
+      <div class="country-row">
+        <div class="country-name">Eritrea</div>
+        <div class="country-psych">
+          <span style="font-size:10px; color:var(--slate);">Diaspora-linked visits · limited tourism</span>
+        </div>
+      </div>
+
+      <div class="country-row" style="background:var(--sand);">
+        <div class="country-name" style="font-size:11px; color:var(--slate); font-family:'DM Mono',monospace; font-weight:400;">KEY INSIGHT</div>
+        <div class="country-psych" style="font-size:11px; color:var(--ink); line-height:1.7;">
+          Commerce, networks, religion, and infrastructure dominate — not safari tourism
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>PSYCHOGRAPHIC FIELD STUDY · ASIA → GREAT GREEN WALL</span>
+    <span>6 TRIBES · 5 MINDSETS · 11 NATIONS</span>
+  </div>
+
+</div>
+</body>
+</html>
