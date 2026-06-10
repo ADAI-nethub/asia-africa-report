@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GGW Six-Tribe Framework — Statistical Validation Report</title>
+<style>
+  /* ── Design tokens ─────────────────────────────────────────────────────── */
+  :root {
+    --sand:      #E8DCC8;
+    --dust:      #C9B89A;
+    --savanna:   #8B6914;
+    --terracotta:#B04E2A;
+    --olive:     #4A5C2E;
+    --deep:      #1A1209;
+    --bark:      #2F1F0A;
+    --sky:       #5F8FAA;
+    --mist:      #F5F1E8;
+    --ink:       #1C160D;
+
+    --font-display: 'Georgia', 'Times New Roman', serif;
+    --font-body:    'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono:    'Courier New', Courier, monospace;
+  }
+
+  /* ── Reset & base ──────────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--mist);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── Horizontal map-strip hero ─────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--bark) 0%, var(--savanna) 45%, var(--olive) 100%);
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.04) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.04) 40px);
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--dust);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 4vw, 46px);
+    font-weight: 700;
+    color: var(--sand);
+    line-height: 1.2;
+    max-width: 780px;
+  }
+  .hero h1 em {
+    color: #E8A04A;
+    font-style: normal;
+  }
+  .hero-sub {
+    margin-top: 18px;
+    font-size: 14px;
+    color: var(--dust);
+    max-width: 700px;
+    line-height: 1.65;
+  }
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .hero-badge {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--sand);
+    font-family: var(--font-mono);
+    letter-spacing: .06em;
+  }
+
+  /* ── Corridor band ─────────────────────────────────────────────────────── */
+  .corridor-band {
+    background: var(--deep);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .corridor-band-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dust);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+  .corridor-country {
+    font-size: 12px;
+    color: var(--sand);
+    padding: 4px 10px;
+    border-right: 1px solid rgba(255,255,255,.15);
+    flex-shrink: 0;
+  }
+  .corridor-country:last-child { border-right: none; }
+
+  /* ── Main layout ───────────────────────────────────────────────────────── */
+  .wrapper {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  /* ── Section styles ────────────────────────────────────────────────────── */
+  .section {
+    margin-top: 56px;
+  }
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2.5vw, 28px);
+    color: var(--bark);
+    border-bottom: 2px solid var(--dust);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .section h3 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    color: var(--savanna);
+    margin: 28px 0 10px;
+  }
+  p { margin-bottom: 14px; }
+  ul, ol { margin: 0 0 14px 22px; }
+  li { margin-bottom: 5px; }
+
+  /* ── Executive summary card ────────────────────────────────────────────── */
+  .exec-card {
+    background: var(--deep);
+    color: var(--sand);
+    border-left: 5px solid #E8A04A;
+    padding: 32px 36px;
+    border-radius: 2px;
+    margin-top: 40px;
+  }
+  .exec-card h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: #E8A04A;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+  }
+  .exec-card p { font-size: 14px; line-height: 1.75; color: var(--sand); margin-bottom: 12px; }
+  .exec-card strong { color: #E8A04A; }
+
+  /* ── Tribe grid ────────────────────────────────────────────────────────── */
+  .tribe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+  }
+  .tribe-card {
+    border: 1px solid var(--dust);
+    border-radius: 3px;
+    padding: 20px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .tribe-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .tribe-card.t1::before { background: #B04E2A; }
+  .tribe-card.t2::before { background: #4A5C2E; }
+  .tribe-card.t3::before { background: #8B6914; }
+  .tribe-card.t4::before { background: #5F8FAA; }
+  .tribe-card.t5::before { background: #7B5EA7; }
+  .tribe-card.t6::before { background: #2F7260; }
+  .tribe-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    color: var(--dust);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .tribe-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--bark);
+    margin-bottom: 8px;
+  }
+  .tribe-desc { font-size: 13px; color: #444; line-height: 1.6; }
+  .tribe-tags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tribe-tag {
+    background: var(--mist);
+    border: 1px solid var(--dust);
+    border-radius: 2px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--savanna);
+  }
+
+  /* ── Phase container ───────────────────────────────────────────────────── */
+  .phase-header {
+    background: var(--savanna);
+    color: var(--sand);
+    padding: 14px 24px;
+    border-radius: 3px 3px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 36px;
+  }
+  .phase-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    opacity: .7;
+  }
+  .phase-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .phase-body {
+    border: 1px solid var(--dust);
+    border-top: none;
+    border-radius: 0 0 3px 3px;
+    padding: 28px;
+    background: #fff;
+  }
+
+  /* ── Stats table ───────────────────────────────────────────────────────── */
+  .stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 18px 0;
+  }
+  .stats-table thead {
+    background: var(--bark);
+    color: var(--sand);
+  }
+  .stats-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .stats-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--dust);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .stats-table tr:last-child td { border-bottom: none; }
+  .stats-table tr:nth-child(even) td { background: var(--mist); }
+  .stats-table .method-badge {
+    display: inline-block;
+    background: var(--terracotta);
+    color: #fff;
+    border-radius: 2px;
+    padding: 1px 7px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    margin-bottom: 3px;
+    white-space: nowrap;
+  }
+  .stats-table .method-badge.geo { background: var(--olive); }
+  .stats-table .method-badge.ts { background: var(--sky); }
+  .stats-table .method-badge.ml { background: #7B5EA7; }
+  .stats-table .method-badge.survey { background: #2F7260; }
+
+  /* ── Query block (code-style) ──────────────────────────────────────────── */
+  .query-block {
+    background: #0E0B06;
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin: 18px 0;
+    overflow-x: auto;
+  }
+  .query-block pre {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #A8D8A8;
+    line-height: 1.6;
+    white-space: pre;
+  }
+  .query-block .comment { color: #6B8C6B; }
+  .query-block .keyword { color: #E8C56A; }
+  .query-block .string  { color: #E8A08A; }
+
+  /* ── Outcome / next-steps boxes ────────────────────────────────────────── */
+  .outcome-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+  @media (max-width: 640px) { .outcome-grid { grid-template-columns: 1fr; } }
+  .outcome-box {
+    border-radius: 3px;
+    padding: 16px 18px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .outcome-box.sig  { background: #EAF4E8; border-left: 4px solid var(--olive); }
+  .outcome-box.null { background: #F9EDEA; border-left: 4px solid var(--terracotta); }
+  .outcome-box .ob-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .outcome-box.sig  .ob-label { color: var(--olive); }
+  .outcome-box.null .ob-label { color: var(--terracotta); }
+
+  .next-box {
+    background: #F0EBE0;
+    border: 1px solid var(--dust);
+    border-radius: 3px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .next-box .nb-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--savanna);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  /* ── Data source pill row ──────────────────────────────────────────────── */
+  .ds-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .ds-pill {
+    background: var(--deep);
+    color: var(--dust);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+
+  /* ── Stat callout ──────────────────────────────────────────────────────── */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .stat-callout {
+    flex: 1;
+    min-width: 140px;
+    background: var(--deep);
+    border-radius: 3px;
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: #E8A04A;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat-unit {
+    font-size: 12px;
+    color: var(--dust);
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    letter-spacing: .06em;
+  }
+
+  /* ── Appendix ──────────────────────────────────────────────────────────── */
+  .appendix {
+    margin-top: 60px;
+    border-top: 2px solid var(--dust);
+    padding-top: 32px;
+  }
+  .appendix h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--bark);
+    margin-bottom: 16px;
+  }
+  .appendix h3 { font-family: var(--font-display); font-size: 15px; color: var(--savanna); margin: 20px 0 8px; }
+  .appendix table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .appendix table th {
+    text-align: left;
+    background: var(--bark);
+    color: var(--sand);
+    padding: 8px 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .appendix table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--dust);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .appendix table tr:nth-child(even) td { background: var(--mist); }
+  .appendix table a { color: var(--terracotta); text-decoration: none; }
+  .appendix table a:hover { text-decoration: underline; }
+
+  /* ── Footer ────────────────────────────────────────────────────────────── */
+  .footer {
+    background: var(--deep);
+    color: var(--dust);
+    text-align: center;
+    padding: 24px 32px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    letter-spacing: .05em;
+    margin-top: 60px;
+  }
+
+  /* ── Print / narrow ────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .wrapper { padding: 0 18px 60px; }
+    .hero { padding: 40px 20px 36px; }
+    .phase-body { padding: 18px; }
+    .stats-table { font-size: 12px; }
+    .stats-table th, .stats-table td { padding: 7px 9px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<header class="hero">
+  <p class="hero-eyebrow">Policy Intelligence Report · GGW Corridor Analytics · June 2026</p>
+  <h1>Validating the <em>Six-Tribe Framework</em><br>for Asian Engagement in the<br>Great Green Wall Corridor</h1>
+  <p class="hero-sub">A structured statistical analysis programme for validating, refining, and operationalising a psychographic traveller segmentation model across the 11-nation Sahel corridor — bridging restoration metrics, tourism flows, and investment intelligence.</p>
+  <div class="hero-meta">
+    <span class="hero-badge">11 GGW Countries</span>
+    <span class="hero-badge">6 Traveller Archetypes</span>
+    <span class="hero-badge">3-Phase Analytics Roadmap</span>
+    <span class="hero-badge">GEE · World Bank · UNWTO Data</span>
+  </div>
+</header>
+
+<!-- ══════════════════════ CORRIDOR STRIP ══════════════════════ -->
+<div class="corridor-band">
+  <span class="corridor-band-label">GGW Corridor →</span>
+  <span class="corridor-country">🇸🇳 Senegal</span>
+  <span class="corridor-country">🇲🇷 Mauritania</span>
+  <span class="corridor-country">🇲🇱 Mali</span>
+  <span class="corridor-country">🇧🇫 Burkina Faso</span>
+  <span class="corridor-country">🇳🇪 Niger</span>
+  <span class="corridor-country">🇳🇬 Nigeria</span>
+  <span class="corridor-country">🇹🇩 Chad</span>
+  <span class="corridor-country">🇸🇩 Sudan</span>
+  <span class="corridor-country">🇪🇹 Ethiopia</span>
+  <span class="corridor-country">🇪🇷 Eritrea</span>
+  <span class="corridor-country">🇩🇯 Djibouti</span>
+</div>
+
+<!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
+<div class="wrapper">
+
+  <!-- EXECUTIVE SUMMARY -->
+  <div class="exec-card">
+    <h2>Executive Summary</h2>
+    <p>The Great Green Wall Initiative (GGWI), launched by the African Union in 2007 and spanning 8,000 km from Dakar to Djibouti, has restored nearly <strong>18 million hectares</strong> of degraded land and created <strong>350,000 jobs</strong> across its 11 partner countries. Yet by 2020, progress had reached only <strong>~15% of its 2030 restoration target</strong>, revealing a structural gap between ambition and execution.</p>
+    <p>This report introduces and analyses a <strong>"Six-Tribe Framework"</strong> — a psychographic segmentation of Asian travellers and investors engaging with the GGW corridor. The framework is <em>an analytical construct developed for this report</em>, not a formalised GGWI policy instrument (see Assumption A-1). Its six tribes — Prestige Explorer, Infrastructure Builder, Heritage Seeker, Muslim Connector, Strategic Investor, and Impact Observer — map distinct motivational profiles of visitors from China, India, Gulf Arab states, Japan, South Korea, Southeast Asia, and Turkey.</p>
+    <p>The report provides a <strong>three-phase statistical programme</strong>: (1) Validation, confirming that six distinct clusters exist in traveller data; (2) Refinement, calibrating tribe boundaries using spatial, temporal, and regression analyses; (3) Operationalisation, translating findings into decision-support tools for GGW implementers, national tourism authorities, and impact investors.</p>
+    <p><strong>Key finding from live data:</strong> African tourism arrivals reached <strong>74 million in 2024</strong> (+7% over 2019), Chinese BRI engagement in Ethiopia surged <strong>+4,827% in 2025</strong> vs 2024, and <strong>$21.7 billion</strong> in BRI deals reached African countries in 2023 alone — all signals that the Sahel corridor is entering a period of intensified Asian engagement that the Six-Tribe Framework is designed to systematically measure.</p>
+  </div>
+
+  <!-- LIVE CONTEXT STATISTICS -->
+  <div class="section">
+    <p class="section-eyebrow">Context — Live Data Anchors</p>
+    <h2>GGW Corridor at a Glance (2024–2026)</h2>
+    <div class="stat-row">
+      <div class="stat-callout">
+        <div class="stat-num">18M</div>
+        <div class="stat-unit">ha restored (2007–2024)</div>
+      </div>
+      <div class="stat-callout">
+        <div class="stat-num">15%</div>
+        <div class="stat-unit">of 2030 target achieved</div>
+      </div>
+      <div class="stat-callout">
+        <div class="stat-num">74M</div>
+        <div class="stat-unit">Africa arrivals 2024</div>
+      </div>
+      <div class="stat-callout">
+        <div class="stat-num">$21.7B</div>
+        <div class="stat-unit">BRI deals in Africa 2023</div>
+      </div>
+      <div class="stat-callout">
+        <div class="stat-num">$6.5B</div>
+        <div class="stat-unit">AfDB GGW commitment</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:#666;font-style:italic;margin-top:-8px;">Sources: GGWI Accelerator, UNWTO World Tourism Barometer 2024, Green Finance & Development Center BRI Report 2025, African Development Bank 2024.</p>
+  </div>
+
+  <!-- FRAMEWORK DEFINITION -->
+  <div class="section">
+    <p class="section-eyebrow">Framework Definition</p>
+    <h2>The Six-Tribe Framework: Conceptual Basis</h2>
+
+    <p><strong>Framework Classification:</strong> The Six-Tribe Framework is a <em>socio-motivational segmentation model</em> — not an official GGWI instrument — that groups Asian travellers, investors, and diaspora visitors to GGW corridor countries into six psychographic archetypes defined by their primary motivational driver, expected behaviour, and economic footprint. It draws from tourism motivation theory (push-pull models), investment psychology research, and religious-cultural travel literature.</p>
+
+    <p>The framework's value for GGW implementers lies in moving beyond aggregate arrival statistics to <em>purposeful segmentation</em>: different tribes require different infrastructure, different visa regimes, different partnership structures, and different storytelling. A single corridor "tourism strategy" fails all six simultaneously.</p>
+
+    <div class="tribe-grid">
+      <div class="tribe-card t1">
+        <div class="tribe-num">Tribe 01</div>
+        <div class="tribe-name">Prestige Explorer</div>
+        <div class="tribe-desc">High-net-worth travellers (primarily Chinese, Japanese, South Korean, Gulf Arab) drawn by rarity, status-signalling narratives, and "last frontier" positioning. Prioritise luxury accommodation, exclusive wildlife access, and uncommon story capital. Most status-sensitive to safety perception.</div>
+        <div class="tribe-tags">
+          <span class="tribe-tag">luxury-spend</span>
+          <span class="tribe-tag">status-signal</span>
+          <span class="tribe-tag">safari/wildlife</span>
+        </div>
+      </div>
+      <div class="tribe-card t2">
+        <div class="tribe-num">Tribe 02</div>
+        <div class="tribe-name">Infrastructure Builder</div>
+        <div class="tribe-desc">Chinese, Turkish, and Gulf Arab engineers, project managers, and contractors accompanying large-scale BRI/GCC infrastructure projects (roads, ports, energy, irrigation). High business visa share. Short repeat cycles tied to project phases.</div>
+        <div class="tribe-tags">
+          <span class="tribe-tag">BRI/GCC</span>
+          <span class="tribe-tag">business-visa</span>
+          <span class="tribe-tag">site-visit</span>
+        </div>
+      </div>
+      <div class="tribe-card t3">
+        <div class="tribe-num">Tribe 03</div>
+        <div class="tribe-name">Heritage Seeker</div>
+        <div class="tribe-desc">Indian, Persian-Gulf Arab, and Omani travellers motivated by historical and cultural ties to the Sahel (trans-Saharan trade routes, Swahili coast links, Malian/Ghanaian gold-salt exchanges). Extend stay for heritage site visits; lower spend but higher repeat rate.</div>
+        <div class="tribe-tags">
+          <span class="tribe-tag">historical-sites</span>
+          <span class="tribe-tag">long-stay</span>
+          <span class="tribe-tag">repeat-visitor</span>
+        </div>
+      </div>
+      <div class="tribe-card t4">
+        <div class="tribe-num">Tribe 04</div>
+        <div class="tribe-name">Muslim Connector</div>
+        <div class="tribe-desc">Travellers from Muslim-majority Asian countries (Indonesia, Malaysia, Turkey, Gulf states, Bangladesh, Pakistan) motivated by religious solidarity, halal tourism infrastructure, Islamic heritage (Timbuktu, Kano), and pilgrimage routes. Highly responsive to halal readiness scores.</div>
+        <div class="tribe-tags">
+          <span class="tribe-tag">halal-tourism</span>
+          <span class="tribe-tag">Islamic-heritage</span>
+          <span class="tribe-tag">solidarity-travel</span>
+        </div>
+      </div>
+      <div class="tribe-card t5">
+        <div class="tribe-num">Tribe 05</div>
+        <div class="tribe-name">Strategic Investor</div>
+        <div class="tribe-desc">Finance, private equity, and agri-business executives (Singapore, Tokyo, Mumbai, Riyadh) visiting to conduct investment due diligence, attend summits, or scout land/carbon opportunities. High daily spend, short stays, intense conversion from first to second visit purpose (tourism → investment).</div>
+        <div class="tribe-tags">
+          <span class="tribe-tag">investment-scouting</span>
+          <span class="tribe-tag">agri-carbon</span>
+          <span class="tribe-tag">conference</span>
+        </div>
+      </div>
+      <div class="tribe-card t6">
+        <div class="tribe-num">Tribe 06</div>
+        <div class="tribe-name">Impact Observer</div>
+        <div class="tribe-desc">NGO staff, academics, journalists, and ESG-focused professionals (Japan, South Korea, India, EU-connected Asians) visiting to document, research, or report on the GGW's environmental and social outcomes. Long stay, low spend, but high amplification value via academic publications and media.</div>
+        <div class="tribe-tags">
+          <span class="tribe-tag">ESG-research</span>
+          <span class="tribe-tag">NGO-staff</span>
+          <span class="tribe-tag">long-stay</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       STATISTICAL QUERY SECTIONS
+  ════════════════════════════════════════════════════ -->
+
+  <!-- ── SECTION 1: VOLUME & ORIGIN ── -->
+  <div class="section">
+    <p class="section-eyebrow">Statistical Module 1</p>
+    <h2>Volume &amp; Origin Statistics</h2>
+    <p>These queries establish the empirical baseline: who is arriving, from where, how many, and through what channels. They are the prerequisite for any tribe density calculation.</p>
+
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Query</th>
+          <th>Why It Matters for the Six-Tribe Framework</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Asian traveller arrivals by nationality</strong> (Chinese, Indian, Japanese, South Korean, Singaporean, Malaysian, Indonesian, Gulf Arab, Turkish) to each GGW state — annual time series 2015–2025</td>
+          <td>Reveals which source markets are growing, stagnating, or declining; validates tribe density per country. Ethiopian BRI growth of +4,827% (2025 vs 2024) is a signal that Infrastructure Builder density is spiking there.</td>
+        </tr>
+        <tr>
+          <td><strong>Visa issuance data</strong> by category (business, tourist, transit, diplomatic) for each Asian nationality to each GGW country</td>
+          <td>Proxies trip purpose. High business visa share → Builder/Strategist tribes. High tourist + religious visa share → Muslim Connector or Heritage Seeker.</td>
+        </tr>
+        <tr>
+          <td><strong>Flight route capacity</strong> (seats/week) from major Asian hubs (Beijing, Delhi, Tokyo, Dubai, Istanbul, Singapore) to GGW capitals</td>
+          <td>Infrastructure indicator; capacity growth correlates with frontier Builder interest. Dubai–Dakar and Dubai–Addis routes are particularly diagnostic.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Phase: Validation -->
+    <div class="phase-header">
+      <span class="phase-label">Phase</span>
+      <span class="phase-title">Validation</span>
+    </div>
+    <div class="phase-body">
+      <h3>Statistical Queries</h3>
+      <p><span class="method-badge">Cluster Analysis</span> Run k-means and hierarchical clustering (Ward's linkage) on nationality × visa-category × arrival-volume matrix. Test k=6 against k=4, k=7, k=8 using silhouette scores and the Calinski-Harabász index. A strong k=6 solution validates tribe count.</p>
+      <p><span class="method-badge ts">Time Series</span> ARIMA / SARIMA models on annual arrival series (2015–2025) per nationality-country dyad. Test for structural breaks (Bai-Perron test) at 2020 (COVID) and 2021 (GGW Accelerator launch). Breaks aligned with GGW milestones validate that the initiative is shaping travel patterns.</p>
+      <p><span class="method-badge">Correlation</span> Pearson correlation between flight seat capacity growth and arrival growth per route. Expected r &gt; 0.7 for Builder and Strategist tribes (capacity-constrained); lower r for Heritage Seekers (demand-led, less sensitive to capacity).</p>
+
+      <div class="query-block">
+        <pre><span class="comment">/* Example: World Bank API — international tourism arrivals */</span>
+<span class="keyword">GET</span> <span class="string">https://api.worldbank.org/v2/country/SN;ML;NE;NG;TD;SD;ET;ER;DJ/indicator/ST.INT.ARVL?format=json&per_page=200&mrv=12</span>
+
+<span class="comment">/* Example: Google Earth Engine — flight route proxy via nighttime lights delta */</span>
+<span class="comment">// (capitals showing NTL growth = infrastructure hub growth)</span>
+<span class="keyword">var</span> ntl = ee.ImageCollection(<span class="string">'NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG'</span>)
+  .filterDate(<span class="string">'2015-01-01'</span>, <span class="string">'2025-12-31'</span>)
+  .select(<span class="string">'avg_rad'</span>);
+<span class="keyword">var</span> capitals = ee.FeatureCollection(<span class="string">'FAO/GAUL/2015/level1'</span>)
+  .filter(ee.Filter.inList(<span class="string">'ADM0_NAME'</span>,
+    [<span class="string">'Senegal'</span>,<span class="string">'Mali'</span>,<span class="string">'Niger'</span>,<span class="string">'Nigeria'</span>,<span class="string">'Chad'</span>,
+     <span class="string">'Sudan'</span>,<span class="string">'Ethiopia'</span>,<span class="string">'Eritrea'</span>,<span class="string">'Djibouti'</span>]));</pre>
+      </div>
+
+      <h3>Required Data Sources</h3>
+      <div class="ds-row">
+        <span class="ds-pill">World Bank ST.INT.ARVL API</span>
+        <span class="ds-pill">UNWTO Tourism Statistics DB</span>
+        <span class="ds-pill">OAG Flight Schedules Analytics</span>
+        <span class="ds-pill">IATA MIDT Booking Data</span>
+        <span class="ds-pill">National immigration ministry records (11 GGW states)</span>
+      </div>
+
+      <h3>Expected Outcomes</h3>
+      <div class="outcome-grid">
+        <div class="outcome-box sig">
+          <div class="ob-label">✓ Significant result</div>
+          K-means converges cleanly on 6 clusters with silhouette ≥ 0.55; ARIMA structural breaks at 2021 align with GGW Accelerator funding inflows. Confirms that the six-tribe segmentation reflects real behavioural differentiation in arrival patterns.
+        </div>
+        <div class="outcome-box null">
+          <div class="ob-label">○ Null result</div>
+          Optimal k = 3–4; structural breaks are random. Suggests the six tribes collapse into fewer (e.g., Builder + Strategist merge; Explorer + Heritage merge). Tribe definitions would need consolidation before operationalisation.
+        </div>
+      </div>
+
+      <div class="next-box">
+        <div class="nb-label">→ Practical Next Steps</div>
+        If k=6 validated: deploy cluster labels as routing tags in national tourism board CRM systems. If k&lt;6: commission a supplementary Q-methodology survey with 80–100 Asian travellers per nationality to re-probe tribe boundaries before investing in segmented marketing infrastructure.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: SPEND & DURATION ── -->
+  <div class="section">
+    <p class="section-eyebrow">Statistical Module 2</p>
+    <h2>Spend &amp; Duration Statistics</h2>
+    <p>Spend and duration are the highest-signal tribe-discriminators available without primary surveys. Prestige Explorers and Infrastructure Builders have vastly different spend profiles; Heritage Seekers and Impact Observers have very different length-of-stay distributions.</p>
+
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Query</th>
+          <th>Why It Matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Average daily spend</strong> by Asian nationality and trip purpose in each GGW state</td>
+          <td>Prestige Explorers (luxury lodges, private guides) and Builders (company-paid per diems) have very different spend profiles; required for tourism yield management and infrastructure investment prioritisation.</td>
+        </tr>
+        <tr>
+          <td><strong>Average length of stay</strong> by nationality and purpose</td>
+          <td>Short, intense visits → Deal-makers (Strategists); longer stays → Heritage-Seekers or Observers. LoS distribution shape (unimodal vs. bimodal) reveals tribe mixing within a nationality.</td>
+        </tr>
+        <tr>
+          <td><strong>Share using luxury vs. budget accommodation</strong> per nationality</td>
+          <td>Validates status-signalling (Explorer) vs. cost-conscious (Observer/Heritage) tribes. Also a proxy for economic leakage: luxury-international vs. budget-local accommodation spend.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="phase-header">
+      <span class="phase-label">Phase</span>
+      <span class="phase-title">Validation &amp; Refinement</span>
+    </div>
+    <div class="phase-body">
+      <h3>Statistical Queries</h3>
+      <p><span class="method-badge">Regression</span> OLS regression: Daily_Spend ~ Nationality + PurposeCategory + AccommodationTier + Interaction(Nationality×Purpose). Significant interaction terms reveal where nationality and purpose jointly determine tribe behaviour — e.g., Gulf Arab × Business differs from Gulf Arab × Religious.</p>
+      <p><span class="method-badge ts">Distributional</span> Fit gamma or log-normal distributions to length-of-stay by tribe candidate group. Two-sample Kolmogorov-Smirnov test between predicted tribe pairs. K-S p &lt; 0.01 across all 15 tribe-pair combinations → distributions are statistically distinct → tribe boundaries hold on duration axis.</p>
+      <p><span class="method-badge ml">Mixed-Effects</span> Multilevel model: Spend_ij = β₀ + β₁(Tribe) + β₂(Country_j) + u_j + ε_ij where j = GGW country. Country-level random effects account for structural differences (Senegal's more developed tourism vs. Eritrea's restricted access).</p>
+
+      <div class="query-block">
+        <pre><span class="comment">/* IMF Balance of Payments — travel credits by country */</span>
+<span class="keyword">GET</span> <span class="string">https://www.imf.org/external/datamapper/api/v1/BCA_NGDPD/SEN/MLI/NER/NGA/TCD/SDN/ETH/ERI/DJI</span>
+
+<span class="comment">/* Python: fit gamma distribution to LoS data */</span>
+<span class="keyword">from</span> scipy.stats <span class="keyword">import</span> gamma, kstest
+params = gamma.fit(los_data[<span class="string">'heritage_seekers'</span>])
+ks_stat, p_val = kstest(los_data[<span class="string">'prestige_explorers'</span>],
+                         <span class="string">'gamma'</span>, args=params)
+<span class="comment"># p < 0.01 confirms tribe separation on LoS axis</span></pre>
+      </div>
+
+      <h3>Required Data Sources</h3>
+      <div class="ds-row">
+        <span class="ds-pill">IMF BOP Travel Credits</span>
+        <span class="ds-pill">STR Global Hotel Data (luxury tier share)</span>
+        <span class="ds-pill">National central bank tourism receipts</span>
+        <span class="ds-pill">UNWTO exit survey microdata</span>
+        <span class="ds-pill">Airbnb / Booking.com API (budget accommodation proxy)</span>
+      </div>
+
+      <h3>Expected Outcomes</h3>
+      <div class="outcome-grid">
+        <div class="outcome-box sig">
+          <div class="ob-label">✓ Significant result</div>
+          Interaction terms Nationality×Purpose significant at p&lt;0.05; K-S tests confirm distinct LoS distributions across all 6 tribe candidates. Justifies deploying separate yield-maximisation strategies per tribe rather than a single composite "Asian visitor" pricing model.
+        </div>
+        <div class="outcome-box null">
+          <div class="ob-label">○ Null result</div>
+          Spend and LoS do not discriminate tribes — distributions overlap substantially. Suggests spend/LoS data alone are insufficient; psychographic survey validation (Module 4) becomes critical before operationalisation.
+        </div>
+      </div>
+
+      <div class="next-box">
+        <div class="nb-label">→ Practical Next Steps</div>
+        Tribe-specific yield benchmarks feed directly into GGW country tourism master plans. Ethiopia and Senegal (highest restored-hectare counts) should pilot luxury eco-lodge pricing for Prestige Explorers using modelled willingness-to-pay estimates. Builder tribes need corporate accommodation stock, not boutique product.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: PURPOSE & ACTIVITY ── -->
+  <div class="section">
+    <p class="section-eyebrow">Statistical Module 3</p>
+    <h2>Purpose &amp; Activity Statistics</h2>
+    <p>Trip purpose is the most direct classifier into tribal membership. Activity data (planned and reported) provides corroboration and captures within-nationality heterogeneity — a Chinese traveller on a safari is not the same as a Chinese construction manager on a site visit.</p>
+
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Query</th>
+          <th>Tribe Linkage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Primary trip purpose</strong> (business, investment scouting, conference, tourism, religious pilgrimage, family visit, education) — from visa applications and exit surveys</td>
+          <td>Direct classification: "religious pilgrimage" → Muslim Connector; "investment scouting" → Strategic Investor; "conference" → Strategist or Observer; "tourism + wildlife" → Prestige Explorer.</td>
+        </tr>
+        <tr>
+          <td><strong>Top planned activities</strong>: wildlife safaris, historical site visits, business meetings, infrastructure site tours, halal food experiences, cultural festivals — from national tourism board booking data</td>
+          <td>Corroborates mindset: safari → Explorer; site tour → Builder; halal food → Connector; historical → Heritage. Activity combinations distinguish Strategist (business + conference + one cultural activity) from pure Builder.</td>
+        </tr>
+        <tr>
+          <td><strong>Asian-owned business or JV registrations</strong> per GGW country, by nationality — from business registry data</td>
+          <td>Economic footprint of Builders/Strategists; a lagging indicator of repeat visits and tribe graduation (first-visit Explorer → registered investor). BRI-linked Chinese JVs in Ethiopia are the clearest current signal.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="phase-header">
+      <span class="phase-label">Phase</span>
+      <span class="phase-title">Validation &amp; Refinement</span>
+    </div>
+    <div class="phase-body">
+      <h3>Statistical Queries</h3>
+      <p><span class="method-badge ml">Multinomial Logit</span> Model tribe membership (6 categories) as outcome; predictors: nationality, primary purpose, top activity, accommodation tier, LoS. Pseudo-R² (McFadden) ≥ 0.25 indicates robust classification. Coefficient magnitudes reveal which variables are strongest tribe discriminators.</p>
+      <p><span class="method-badge geo">Spatial</span> Map JV registration density against GGW restoration progress (ha restored by region). Bivariate Moran's I statistic to test spatial co-clustering. If JV density and restoration hectares are positively co-clustered (Moran's I &gt; 0 at p &lt; 0.05), it validates that Builder tribe activity is co-located with GGW implementation zones — critical insight for targeting.</p>
+      <p><span class="method-badge ts">Panel Data</span> Fixed-effects panel regression: JV_registrations_it = α_i + β₁(BRI_deal_value_it) + β₂(ha_restored_it) + β₃(conflict_index_it) + ε_it where i = GGW country, t = year. This decomposes whether JV growth is BRI-driven, GGW-driven, or conflict-suppressed.</p>
+
+      <div class="query-block">
+        <pre><span class="comment">/* Google Earth Engine — MODIS land cover for restoration proxy */</span>
+<span class="keyword">var</span> modis = ee.ImageCollection(<span class="string">'MODIS/061/MCD12Q1'</span>)
+  .select(<span class="string">'LC_Type1'</span>)
+  .filterDate(<span class="string">'2015-01-01'</span>, <span class="string">'2025-01-01'</span>);
+
+<span class="comment">/* Compute annual vegetation gain in GGW corridor */</span>
+<span class="keyword">var</span> ndvi = ee.ImageCollection(<span class="string">'MODIS/061/MOD13Q1'</span>)
+  .select(<span class="string">'NDVI'</span>)
+  .filterBounds(ggw_corridor_geometry);
+
+<span class="comment">/* World Bank — FDI inflows by country */</span>
+<span class="keyword">GET</span> <span class="string">https://api.worldbank.org/v2/country/ETH;SEN;NER/indicator/BX.KLT.DINV.CD.WD?format=json&date=2015:2025</span></pre>
+      </div>
+
+      <h3>Required Data Sources</h3>
+      <div class="ds-row">
+        <span class="ds-pill">MODIS MCD12Q1 Land Cover</span>
+        <span class="ds-pill">MODIS MOD13Q1 NDVI</span>
+        <span class="ds-pill">World Bank FDI Inflows API</span>
+        <span class="ds-pill">Green Finance Dev. Center BRI Tracker</span>
+        <span class="ds-pill">National business registry databases</span>
+        <span class="ds-pill">ACLED conflict event data</span>
+      </div>
+
+      <h3>Expected Outcomes</h3>
+      <div class="outcome-grid">
+        <div class="outcome-box sig">
+          <div class="ob-label">✓ Significant result</div>
+          Multinomial logit pseudo-R² ≥ 0.25; bivariate Moran's I shows Builder JVs cluster in regions with active GGW restoration. Confirms that purpose/activity data can reliably classify tribe membership and that Builders are genuinely co-located with the initiative.
+        </div>
+        <div class="outcome-box null">
+          <div class="ob-label">○ Null result</div>
+          JV density is spatially uncorrelated with restoration progress (Moran's I ≈ 0). Suggests Builders are present in GGW countries for non-GGW reasons (mineral extraction, port infrastructure). The GGW brand is not yet the attractor — a communication strategy targeting Builders explicitly is needed.
+        </div>
+      </div>
+
+      <div class="next-box">
+        <div class="nb-label">→ Practical Next Steps</div>
+        Where spatial co-clustering is confirmed, GGW corridor governments should create special economic zones (SEZs) at high-restoration nodes to formalise and attract Builder tribe JVs. GGWI communications should explicitly market carbon credit and green infrastructure investment opportunities to Singapore and Tokyo-based Strategic Investor tribe members.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: PSYCHOGRAPHIC VALIDATION ── -->
+  <div class="section">
+    <p class="section-eyebrow">Statistical Module 4</p>
+    <h2>Psychographic Validation Statistics</h2>
+    <p>Administrative data (arrivals, visas, JVs) can identify tribe-like patterns, but only primary psychographic data can validate the motivational structures that the framework posits. This module is the analytical core of the validation phase.</p>
+
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Query</th>
+          <th>Tribe Linkage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Survey: Likert-scale responses</strong> to statements like "Africa is the last frontier for growth," "I feel safer in Muslim-majority African countries," "I travel to collect uncommon stories" — from national tourism board exit surveys or commissioned rapid surveys at airports</td>
+          <td>Directly validates six-tribe hypotheses. "Last frontier" → Explorer; "safer in Muslim-majority" → Connector; "uncommon stories" → Explorer/Observer.</td>
+        </tr>
+        <tr>
+          <td><strong>Factor analysis of traveller motivations</strong> from large-scale survey (UNWTO or national tourism board)</td>
+          <td>Confirms whether six motivational factors emerge as statistically distinct latent dimensions. Exploratory factor analysis (EFA) with oblique rotation (Promax) identifies factor structure; confirmatory factor analysis (CFA) tests fit of the six-factor model.</td>
+        </tr>
+        <tr>
+          <td><strong>Social media sentiment analysis</strong> — Weibo, WeChat, Instagram, Twitter/X, LINE — geotagged from GGW countries</td>
+          <td>Reveals dominant narrative frames per nationality: "opportunity" vs. "adventure" vs. "spiritual" word frequency. Tribe-characteristic word clouds validate motivational archetypes without survey overhead.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="phase-header">
+      <span class="phase-label">Phase</span>
+      <span class="phase-title">Core Validation</span>
+    </div>
+    <div class="phase-body">
+      <h3>Statistical Queries</h3>
+      <p><span class="method-badge survey">EFA/CFA</span> Exploratory Factor Analysis (EFA) on Likert battery (n ≥ 500 per nationality group). Parallel analysis to determine factor count. Fit six-factor solution; check factor loadings ≥ 0.4, cross-loadings &lt; 0.3. Then CFA: test RMSEA &lt; 0.06, CFI &gt; 0.95 for the six-factor model vs. alternative models (3-factor, 4-factor).</p>
+      <p><span class="method-badge ml">Topic Modelling</span> Latent Dirichlet Allocation (LDA) on scraped social media text (Weibo geotagged from Sahel countries; Instagram posts with GGW-adjacent hashtags). Set k=6 topics; compute coherence score. Map LDA topics to tribe labels. Tribe-topic alignment coefficient ≥ 0.7 validates narrative distinctiveness.</p>
+      <p><span class="method-badge survey">MANOVA</span> Multivariate analysis: test whether the six survey-identified tribe groups differ significantly across all Likert items simultaneously. Wilks' Λ &lt; 0.5 at p &lt; 0.001 → tribes are psychographically distinct populations.</p>
+
+      <div class="query-block">
+        <pre><span class="comment">/* Python: EFA with six-factor solution */</span>
+<span class="keyword">from</span> factor_analyzer <span class="keyword">import</span> FactorAnalyzer, ConfirmFactor
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+fa = FactorAnalyzer(n_factors=6, rotation=<span class="string">'promax'</span>)
+fa.fit(survey_df)
+loadings = fa.loadings_
+ev, v = fa.get_eigenvalues()
+
+<span class="comment">/* R: CFA with lavaan */</span>
+<span class="comment"># model <- 'Prestige =~ q1 + q4 + q9
+#           Builder  =~ q2 + q6 + q11
+#           Heritage =~ q3 + q7 + q13'
+# fit <- cfa(model, data=survey_df, estimator='MLR')
+# summary(fit, fit.measures=TRUE, standardized=TRUE)</span>
+
+<span class="comment">/* Twitter/X API v2 — geotagged posts */</span>
+<span class="keyword">GET</span> <span class="string">https://api.twitter.com/2/tweets/search/recent?query=sahel+africa+place_country:SN+lang:zh&tweet.fields=geo,text,author_id</span></pre>
+      </div>
+
+      <h3>Required Data Sources</h3>
+      <div class="ds-row">
+        <span class="ds-pill">Commissioned exit survey (n≥500/nationality)</span>
+        <span class="ds-pill">UNWTO exit survey microdata</span>
+        <span class="ds-pill">Weibo API (geotagged, Sahel-region posts)</span>
+        <span class="ds-pill">Twitter/X API v2</span>
+        <span class="ds-pill">Instagram Graph API</span>
+        <span class="ds-pill">LINE Research Panel (Southeast Asia)</span>
+      </div>
+
+      <h3>Expected Outcomes</h3>
+      <div class="outcome-grid">
+        <div class="outcome-box sig">
+          <div class="ob-label">✓ Significant result</div>
+          EFA identifies 6 factors matching tribe labels with adequate fit (RMSEA &lt; 0.06). LDA topics align with 6 tribe narratives. MANOVA Wilks' Λ significant at p &lt; 0.001. Framework is psychometrically validated — proceed to operationalisation with confidence.
+        </div>
+        <div class="outcome-box null">
+          <div class="ob-label">○ Null result</div>
+          Factor analysis yields 3–4 factors; LDA topics don't distinguish Explorer from Heritage. Tribes need consolidation or sub-tribe differentiation. May indicate that the current wave of Asian travellers to Sahel is too homogeneous (mostly Builders) for full six-tribe expression — repeat test in 3 years as corridor matures.
+        </div>
+      </div>
+
+      <div class="next-box">
+        <div class="nb-label">→ Practical Next Steps</div>
+        Validated psychographic profiles should be embedded in national tourism board exit survey instruments as 12-item screener batteries. This enables continuous, real-time tribe monitoring without a separate research programme. Social media LDA outputs feed into a real-time "narrative dashboard" for GGW communication teams, alerting them when Explorer or Connector narrative dominance shifts.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: FRICTION & SATISFACTION ── -->
+  <div class="section">
+    <p class="section-eyebrow">Statistical Module 5</p>
+    <h2>Friction &amp; Satisfaction Statistics</h2>
+    <p>Tribes are differentially sensitive to friction. A visa rejection crushes an Indian Heritage Seeker's trip but barely affects a Chinese Infrastructure Builder (who has corporate visa facilitation). Understanding tribe-specific friction profiles allows targeted barrier reduction.</p>
+
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Query</th>
+          <th>Tribe Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Visa rejection rates</strong> by Asian nationality for each GGW country</td>
+          <td>Major friction point; high rejections for Indian heritage-seekers in Sudan suppress Heritage Seeker tribe. Builders often immune (business visa facilitation by state-owned enterprises). Rejection rates are a proxy for tribe suppression at the border.</td>
+        </tr>
+        <tr>
+          <td><strong>Post-trip satisfaction scores</strong> by nationality and trip purpose — from tourism board surveys</td>
+          <td>Tribe-specific CSAT reveals where product-market fit fails. Prestige Explorers give low scores if luxury accommodation is unavailable; Impact Observers give low scores for poor data/research access infrastructure.</td>
+        </tr>
+        <tr>
+          <td><strong>Safety perception index</strong> (travel advisories, insurance claims, user reviews) by nationality and GGW region</td>
+          <td>Prestige Explorers are especially sensitive; Builders less so (company-mandated risk acceptance). Safety perception determines which GGW countries each tribe considers accessible — critical for sub-national mapping of tribe opportunity zones.</td>
+        </tr>
+        <tr>
+          <td><strong>Halal tourism readiness score</strong> per GGW urban centre — number of halal-certified restaurants, prayer facilities, Islamic banks</td>
+          <td>Directly determines Muslim Connector tribe volume. Dakar (Senegal) and Kano (Nigeria) likely score highest; Asmara (Eritrea) lowest. Score gaps indicate infrastructure investment priority zones.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="phase-header">
+      <span class="phase-label">Phase</span>
+      <span class="phase-title">Refinement</span>
+    </div>
+    <div class="phase-body">
+      <h3>Statistical Queries</h3>
+      <p><span class="method-badge">Survival Analysis</span> Kaplan-Meier curves of "time-to-second-visit" by tribe candidate group. Log-rank test for differences. Cox proportional hazards model: hazard_of_return ~ Satisfaction_score + Visa_ease + Safety_perception + Halal_score + Tribe_identity. Significant hazard ratios identify which friction variables most suppress tribe repeat rates.</p>
+      <p><span class="method-badge geo">Spatial Regression</span> Geographically Weighted Regression (GWR): model Satisfaction_score ~ Halal_readiness + Safety_index + Accommodation_quality as spatially varying coefficients across GGW urban centres. GWR reveals where halal readiness matters most (Muslim-majority zones) vs. where safety perception dominates (conflict-affected zones — Mali, Burkina Faso, Niger).</p>
+      <p><span class="method-badge survey">Structural Equation Model</span> SEM path: Tribe_identity → Friction_perception → Satisfaction → Repeat_intent. Mediation analysis: does safety perception fully mediate the Explorer → Repeat pathway? Partial mediation suggests product quality also matters (not just fear).</p>
+
+      <div class="query-block">
+        <pre><span class="comment">/* Halal tourism score proxy: OpenStreetMap + OSMnx */</span>
+<span class="keyword">import</span> osmnx <span class="keyword">as</span> ox
+
+<span class="keyword">for</span> city <span class="keyword">in</span> [<span class="string">'Dakar'</span>, <span class="string">'Kano'</span>, <span class="string">'N\'Djamena'</span>, <span class="string">'Khartoum'</span>, <span class="string">'Addis Ababa'</span>]:
+    amenities = ox.features_from_place(city,
+        tags={<span class="string">'amenity'</span>: [<span class="string">'place_of_worship'</span>, <span class="string">'restaurant'</span>],
+              <span class="string">'religion'</span>: <span class="string">'muslim'</span>,
+              <span class="string">'cuisine'</span>: <span class="string">'halal'</span>})
+    halal_score[city] = <span class="keyword">len</span>(amenities)
+
+<span class="comment">/* ACLED — conflict events affecting traveller safety */</span>
+<span class="keyword">GET</span> <span class="string">https://api.acleddata.com/acled/read/?key=API_KEY&country=Mali;Burkina_Faso;Niger&year=2022:2025&event_type=Violence_against_civilians</span></pre>
+      </div>
+
+      <h3>Required Data Sources</h3>
+      <div class="ds-row">
+        <span class="ds-pill">UNHCR Visa Issuance/Rejection data</span>
+        <span class="ds-pill">National tourism board CSAT surveys</span>
+        <span class="ds-pill">ACLED conflict event API</span>
+        <span class="ds-pill">OpenStreetMap (OSMnx) amenity data</span>
+        <span class="ds-pill">Global Muslim Travel Index (GMTI 2024)</span>
+        <span class="ds-pill">Tripadvisor/Google Reviews sentiment</span>
+      </div>
+
+      <h3>Expected Outcomes</h3>
+      <div class="outcome-grid">
+        <div class="outcome-box sig">
+          <div class="ob-label">✓ Significant result</div>
+          Cox model shows halal_score has significant hazard ratio for Connector tribe repeat; safety_index dominates Explorer tribe. GWR coefficients spatially map which interventions apply where. Gives GGW implementers a ranked, location-specific friction-reduction agenda.
+        </div>
+        <div class="outcome-box null">
+          <div class="ob-label">○ Null result</div>
+          No tribe-differential friction effects — all tribes equally deterred by all friction types. Suggests the corridor is operating below a viability threshold where tribe-specific differentiation is drowned out by universal access barriers. Baseline infrastructure (airports, basic safety) must be addressed before tribe-level interventions yield returns.
+        </div>
+      </div>
+
+      <div class="next-box">
+        <div class="nb-label">→ Practical Next Steps</div>
+        GWR output maps should be delivered to each GGW country's Tourism Ministry as an interactive tool: "these three cities have highest Muslim Connector suppression from halal infrastructure gaps — invest here first." Senegal already performs well on GMTI; Ethiopia needs targeted halal investment in Addis Ababa as BRI-linked Muslim Connector flows from Malaysia and Indonesia increase.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6: REPEAT & CONVERSION ── -->
+  <div class="section">
+    <p class="section-eyebrow">Statistical Module 6</p>
+    <h2>Repeat &amp; Conversion Statistics</h2>
+    <p>The most strategically valuable insight the framework can generate is the <em>tribe conversion pathway</em>: the predictable sequence by which an Explorer's second visit becomes an investment scouting trip, or a Builder's repeated stays generate Heritage Seeker behaviour. Measuring these conversions validates the framework's dynamic, not just its static typology.</p>
+
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Query</th>
+          <th>Why It Matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Repeat visit rate</strong> by nationality and initial trip purpose</td>
+          <td>Key metric for tribe evolution. Heritage Seekers should show highest repeat rates (deep cultural motivation); Builders show high repeat rates at project-phase frequencies. Strategic Investors show high second-visit rates only if first-visit deal activity was positive.</td>
+        </tr>
+        <tr>
+          <td><strong>Inter-visit interval</strong> (time between first and second visit) by nationality and purpose</td>
+          <td>High frequency (≤6 months) → deep business/network ties (Builder, Strategist). Long intervals (≥18 months) → tourism-driven (Explorer, Heritage). Bimodal distribution within a nationality reveals tribe mixing.</td>
+        </tr>
+        <tr>
+          <td><strong>Purpose transition across visits</strong> — e.g., first visit "tourism," second visit "investment scouting"</td>
+          <td>Validates conversion pathway hypothesis central to the framework's commercial value. The Explorer-to-Strategist conversion is the highest-value pathway for GGW host economies; quantifying its probability and latency allows investment in conversion infrastructure (investment summits, site tour packages, business matchmaking).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="phase-header">
+      <span class="phase-label">Phase</span>
+      <span class="phase-title">Operationalisation</span>
+    </div>
+    <div class="phase-body">
+      <h3>Statistical Queries</h3>
+      <p><span class="method-badge ts">Markov Chain</span> Model tribe transitions as a discrete-time Markov chain. Transition matrix T where T[i,j] = P(tribe at visit k+1 = j | tribe at visit k = i). Stationary distribution identifies the long-run equilibrium tribe composition. High Explorer→Strategist transition probability validates the "corridor graduation" hypothesis.</p>
+      <p><span class="method-badge">Survival Analysis</span> Weibull accelerated failure time model for inter-visit interval. Predictors: first-visit satisfaction, tribe identity, visa ease, deal closure at prior visit. Coefficients quantify which factors most accelerate (or delay) return visits — enabling targeted retention interventions.</p>
+      <p><span class="method-badge survey">Sequence Analysis</span> Optimal Matching Analysis (OMA) on visit-purpose sequences (e.g., Tourism → Tourism → Business → Investment). Cluster resulting sequences into pathway archetypes. Dominant pathways for each nationality validate or refute the conversion hypotheses built into the framework's design.</p>
+
+      <div class="query-block">
+        <pre><span class="comment">/* Python: Markov chain tribe transition matrix */</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> pykov <span class="keyword">import</span> Chain
+
+<span class="comment"># tribe_sequences: list of (visit_1_tribe, visit_2_tribe, ...) per traveller</span>
+transitions = {}
+<span class="keyword">for</span> seq <span class="keyword">in</span> tribe_sequences:
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="keyword">len</span>(seq)-1):
+        pair = (seq[i], seq[i+1])
+        transitions[pair] = transitions.get(pair, 0) + 1
+
+chain = Chain(transitions)
+stationary = chain.steady()
+<span class="comment"># stationary['Strategist'] > 0.25 → long-run conversion validates framework</span>
+
+<span class="comment">/* R: Optimal Matching Analysis */</span>
+<span class="comment"># library(TraMineR)
+# seq_data <- seqdef(purpose_matrix, alphabet=c("EXP","BLD","HER","CON","STR","OBS"))
+# dist_mat <- seqdist(seq_data, method="OM", indel=1, sm="TRATE")
+# clust <- agnes(dist_mat, method="ward")</span></pre>
+      </div>
+
+      <h3>Required Data Sources</h3>
+      <div class="ds-row">
+        <span class="ds-pill">Immigration border-crossing linked records (passport-matched)</span>
+        <span class="ds-pill">National tourism board panel survey (matched respondents)</span>
+        <span class="ds-pill">Airline loyalty programme data (anonymised)</span>
+        <span class="ds-pill">Hotel CRM repeat-guest records (anonymised)</span>
+        <span class="ds-pill">Business registry (date of JV registration vs. first visit date)</span>
+      </div>
+
+      <h3>Expected Outcomes</h3>
+      <div class="outcome-grid">
+        <div class="outcome-box sig">
+          <div class="ob-label">✓ Significant result</div>
+          Markov chain shows Explorer→Strategist transition probability ≥ 0.20 (1 in 5 return as investors); Weibull model confirms satisfaction and visa ease significantly accelerate return. OMA reveals 3–4 dominant pathway archetypes matching the framework's theoretical conversion routes. The framework is both valid and commercially actionable.
+        </div>
+        <div class="outcome-box null">
+          <div class="ob-label">○ Null result</div>
+          Transition matrix is close to identity (people return in the same tribe they arrived in); no statistically significant conversion pathways emerge. Framework is still valid as a static segmentation tool but lacks dynamic predictive power. Investment in conversion infrastructure should be deprioritised until baseline repeat-visit rates improve.
+        </div>
+      </div>
+
+      <div class="next-box">
+        <div class="nb-label">→ Practical Next Steps</div>
+        If Explorer→Strategist conversion confirmed: launch "GGW Investment Experience" packages — luxury safari itineraries with embedded site visits to restoration zones, carbon credit briefings, and matchmaking with local agri-entrepreneurs. These convert Prestige Explorers into Strategic Investors within 12–18 months. If Markov chain shows high Builder→Heritage transitions in Senegal and Ethiopia, invest in guided historical tour infrastructure near BRI construction sites — a high-return, low-cost addition to the Builder experience.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ APPENDIX ══════════════════════ -->
+  <div class="appendix">
+    <h2>Appendix A — Data Sources &amp; Access Methods</h2>
+
+    <h3>A1. Open / Free APIs</h3>
+    <table>
+      <thead>
+        <tr><th>Dataset</th><th>Provider</th><th>Access URL</th><th>Key Variables</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>International tourist arrivals</td>
+          <td>World Bank</td>
+          <td><a href="https://api.worldbank.org/v2/country/{iso}/indicator/ST.INT.ARVL" target="_blank">api.worldbank.org</a></td>
+          <td>Annual arrivals 1995–2024, 11 GGW countries</td>
+        </tr>
+        <tr>
+          <td>MODIS NDVI (land restoration proxy)</td>
+          <td>NASA / Google Earth Engine</td>
+          <td><a href="https://code.earthengine.google.com" target="_blank">earthengine.google.com</a></td>
+          <td>MOD13Q1, 250m, 16-day, 2000–present</td>
+        </tr>
+        <tr>
+          <td>MODIS Land Cover</td>
+          <td>NASA / GEE</td>
+          <td>MCD12Q1 Collection 6.1</td>
+          <td>Annual land cover type, 500m, 2001–present</td>
+        </tr>
+        <tr>
+          <td>FDI Inflows</td>
+          <td>World Bank</td>
+          <td>BX.KLT.DINV.CD.WD indicator</td>
+          <td>Annual FDI net inflows, USD, all countries</td>
+        </tr>
+        <tr>
+          <td>Conflict events</td>
+          <td>ACLED</td>
+          <td><a href="https://api.acleddata.com/acled/read/" target="_blank">api.acleddata.com</a></td>
+          <td>Geo-coded events by type, actor, fatalities</td>
+        </tr>
+        <tr>
+          <td>OSM Amenities (halal proxy)</td>
+          <td>OpenStreetMap / OSMnx</td>
+          <td>pip install osmnx; ox.features_from_place()</td>
+          <td>Mosques, halal restaurants, Islamic banks per city</td>
+        </tr>
+        <tr>
+          <td>Precipitation / climate</td>
+          <td>CHIRPS / NOAA</td>
+          <td>GEE: UCSB-CHG/CHIRPS/DAILY</td>
+          <td>Daily rainfall, 0.05°, 1981–present</td>
+        </tr>
+        <tr>
+          <td>BRI Investment Tracker</td>
+          <td>Green Finance Dev. Center</td>
+          <td><a href="https://greenfdc.org/bri-tracker" target="_blank">greenfdc.org</a></td>
+          <td>Deal value, sector, country, year 2013–2026</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>A2. Commercial / Restricted Data</h3>
+    <table>
+      <thead>
+        <tr><th>Dataset</th><th>Provider</th><th>Access Route</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Flight seat capacity by route</td>
+          <td>OAG / CIRIUM</td>
+          <td>Licensed API — academic/government request</td>
+        </tr>
+        <tr>
+          <td>Hotel accommodation tier data</td>
+          <td>STR Global / CoStar</td>
+          <td>Licensed data subscription</td>
+        </tr>
+        <tr>
+          <td>UNWTO exit survey microdata</td>
+          <td>UN Tourism</td>
+          <td>Research data request via data.unwto.org</td>
+        </tr>
+        <tr>
+          <td>Weibo API (Chinese social media)</td>
+          <td>Sina Weibo</td>
+          <td>Developer API application; academic agreements</td>
+        </tr>
+        <tr>
+          <td>IMF Balance of Payments (travel)</td>
+          <td>IMF</td>
+          <td>datamapper.imf.org — free public API</td>
+        </tr>
+        <tr>
+          <td>Visa rejection rates</td>
+          <td>National immigration ministries</td>
+          <td>MOU / data-sharing agreement with GGW country governments</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>A3. Primary Data to Commission</h3>
+    <table>
+      <thead>
+        <tr><th>Survey Type</th><th>Sample Size</th><th>Instrument</th><th>Deploying Body</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Airport exit survey (Likert battery)</td>
+          <td>n ≥ 500 per nationality, 5 major GGW airports</td>
+          <td>28-item questionnaire (6 tribe screener + friction items)</td>
+          <td>National tourism boards + GGWI Secretariat</td>
+        </tr>
+        <tr>
+          <td>Online panel — Asian outbound travelers</td>
+          <td>n ≥ 200 per nationality (CN, IN, MY, AE, TR, JP, KR)</td>
+          <td>Adapted UNWTO motivation scale + 6-tribe screener</td>
+          <td>Commissioned via YouGov / Ipsos Asia</td>
+        </tr>
+        <tr>
+          <td>Repeat visitor in-depth interview</td>
+          <td>n = 30 per tribe (n = 180 total)</td>
+          <td>Semi-structured, 45-minute qualitative protocol</td>
+          <td>Partner NGOs / GGW country tourism associations</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Appendix B — Assumptions</h2>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Assumption</th><th>Implication if Wrong</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A-1</td>
+          <td>The Six-Tribe Framework is an analytical construct developed for this report, not an official GGWI instrument.</td>
+          <td>If a parallel framework exists under another name, this analysis should be harmonised with it before operationalisation.</td>
+        </tr>
+        <tr>
+          <td>A-2</td>
+          <td>Tribe membership is the primary trip-purpose driver, not nationality. A Chinese Prestige Explorer and a Japanese Prestige Explorer share more motivational structure than a Chinese Explorer and a Chinese Builder.</td>
+          <td>If nationality dominates over motivation, multinomial models will be mis-specified. Cross-national validity must be tested explicitly in CFA.</td>
+        </tr>
+        <tr>
+          <td>A-3</td>
+          <td>BRI investment data (Green Finance Dev. Center) accurately captures Chinese Builder tribe's economic footprint in the corridor.</td>
+          <td>BRI data undercounts informal/private Chinese investment. Registry-based JV counts are used as a complementary check.</td>
+        </tr>
+        <tr>
+          <td>A-4</td>
+          <td>The GGW corridor's 11 countries constitute a meaningful spatial unit for tribe analysis despite large internal heterogeneity (Senegal ≠ Eritrea).</td>
+          <td>Sub-national analysis is preferred; national-level analysis is a necessary first step given data availability constraints.</td>
+        </tr>
+        <tr>
+          <td>A-5</td>
+          <td>Social media text from Weibo/Instagram geotagged in Sahel countries represents Asian traveller sentiment, not diaspora or bot activity.</td>
+          <td>Filtering requires language-detection, geotag precision threshold (±1km from urban centres), and account age validation.</td>
+        </tr>
+        <tr>
+          <td>A-6</td>
+          <td>MODIS NDVI and land cover data are valid proxies for GGW restoration progress at the national level.</td>
+          <td>Remote sensing captures greenness, not restoration quality. Ground-truth calibration with GGWI country reports is required for any restoration-JV spatial correlation analysis.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Appendix C — Recommended Statistical Toolkit</h2>
+    <table>
+      <thead>
+        <tr><th>Task</th><th>Tool</th><th>Language</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Spatial autocorrelation (Moran's I, GWR)</td><td>PySAL, spdep (R)</td><td>Python / R</td></tr>
+        <tr><td>Factor analysis (EFA, CFA)</td><td>factor_analyzer (Py), lavaan (R)</td><td>Python / R</td></tr>
+        <tr><td>Survival analysis</td><td>lifelines (Py), survival (R)</td><td>Python / R</td></tr>
+        <tr><td>Markov chain modelling</td><td>pykov, hmmlearn</td><td>Python</td></tr>
+        <tr><td>Optimal Matching Analysis</td><td>TraMineR</td><td>R</td></tr>
+        <tr><td>Topic modelling (LDA)</td><td>gensim, BERTopic</td><td>Python</td></tr>
+        <tr><td>Remote sensing / GEE</td><td>earthengine-api, geemap</td><td>Python / JS</td></tr>
+        <tr><td>Panel regression</td><td>linearmodels (Py), plm (R)</td><td>Python / R</td></tr>
+        <tr><td>SEM path analysis</td><td>semopy (Py), lavaan (R)</td><td>Python / R</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /wrapper -->
+
+<footer class="footer">
+  GGW Six-Tribe Framework — Statistical Validation Report · Prepared June 2026 · Data sources: GGWI Accelerator, UNWTO, World Bank, Green Finance Development Center, ACLED, African Development Bank · Framework is an analytical construct; not official GGWI policy
+</footer>
+
+</body>
+</html>
